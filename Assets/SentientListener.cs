@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using XInputDotNetPure; // Required in C#
-using VRTK;
+//using XInputDotNetPure; // Required in C#
+using Valve.VR;
 
 
 public class SentientListener : MonoBehaviour{
     bool playerIndexSet = false;
-    PlayerIndex playerIndex;
+//    PlayerIndex playerIndex;
 
-    public VRTK_ControllerReference controller;
+	public SteamVR_Controller.Device controller;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -42,23 +42,24 @@ public class SentientListener : MonoBehaviour{
 
     void pulse(float strength){
         // GamePad.SetVibration(playerIndex, strength, strength);
-        VRTK_SDK_Bridge.HapticPulse(controller, strength);
+		controller.TriggerHapticPulse(strength*500);
+
     }
     
     void Update(){
-        if (!playerIndexSet && GamePad.GetState(playerIndex).IsConnected)
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                PlayerIndex testPlayerIndex = (PlayerIndex)i;
-                GamePadState testState = GamePad.GetState(testPlayerIndex);
-                if (testState.IsConnected)
-                {
-                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
-                    playerIndex = testPlayerIndex;
-                    playerIndexSet = true;
-                }
-            }
-        }
+//        if (!playerIndexSet && GamePad.GetState(playerIndex).IsConnected)
+//        {
+//            for (int i = 0; i < 4; ++i)
+//            {
+//                PlayerIndex testPlayerIndex = (PlayerIndex)i;
+//                GamePadState testState = GamePad.GetState(testPlayerIndex);
+//                if (testState.IsConnected)
+//                {
+//                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+//                    playerIndex = testPlayerIndex;
+//                    playerIndexSet = true;
+//                }
+//            }
+//        }
     }
 }

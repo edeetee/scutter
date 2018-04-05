@@ -16,8 +16,7 @@ public class TakeControl : MonoBehaviour {
 	SpringJoint spring;
 	Collider highestCol;
 
-	VRTK_ControllerReference controller;
-	Transform followTransform;
+	SteamVR_Controller.Device controller;
 
 	void Awake () {
 		spring = GetComponent<SpringJoint>();
