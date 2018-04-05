@@ -10,9 +10,10 @@ static public class ColliderExtensions{
     /// <returns></returns>
     public static Vector3 getTop(this Collider collider){
         // hack to get most derived extension
-        Vector3? tryDerived = (collider as BoxCollider)?.getTop() ?? (collider as SphereCollider)?.getTop();
-        if(tryDerived != null)
-            return (Vector3)tryDerived;
+        if(collider is BoxCollider)
+            return (collider as BoxCollider).getTop();
+        else if(collider is SphereCollider)
+            return (collider as SphereCollider).getTop();
         
         //fallback
         Vector3 top = collider.transform.InverseTransformPoint(collider.bounds.center);
