@@ -25,7 +25,7 @@ public class SentientListener : MonoBehaviour{
     {
         if(collision.collider.tag == "Sentient"){
             float strength = (collision.impulse/collision.collider.GetComponent<Rigidbody>().mass/Time.fixedDeltaTime).magnitude*0.01f;
-            Debug.Log("Collision Strength: " + strength);
+                Debug.Log("Collision Strength: " + strength);
             pulse(strength);
         }
     }
@@ -42,8 +42,7 @@ public class SentientListener : MonoBehaviour{
 
     void pulse(float strength){
         // GamePad.SetVibration(playerIndex, strength, strength);
-		controller.TriggerHapticPulse(strength*500);
-
+        controller.TriggerHapticPulse((ushort)(strength*500));
     }
     
     void Update(){

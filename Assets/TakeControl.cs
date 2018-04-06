@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using VRTK;
-
-[ExecuteInEditMode]
+[ExecuteInEditMode, RequireComponent(typeof(SpringJoint)), RequireComponent(typeof(SteamVR_TrackedObject))]
 public class TakeControl : MonoBehaviour {
 	public bool drawDebug = true;
-	public SDK_BaseController.ControllerHand hand;
-
+    public int controllerIndex;
+            
 	Vector3 top = Vector3.zero;
 	Rigidbody target;
 
@@ -21,7 +19,8 @@ public class TakeControl : MonoBehaviour {
 	void Awake () {
 		spring = GetComponent<SpringJoint>();
 
-		controller =  new VRTK_ControllerReference(VRTK_SDK_Bridge.GetControllerByHand(hand, true));
+        int index = (int)GetComponent<SteamVR_TrackedObject>().index;
+        controller = SteamVR_Controller.Input(index);
 
 		GameObject randObj = GameObject.FindGameObjectsWithTag("Sentient").Shuffle()[0];
 		SetTarget(randObj.GetComponent<Rigidbody>());
@@ -29,7 +28,7 @@ public class TakeControl : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-		transform.position = controller.actual.transform.position;
+        transform.position = controller.transform.pos;
 	}
 
 	void Update() {
