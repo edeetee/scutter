@@ -2,63 +2,92 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-//using XInputDotNetPure; // Required in C#
+using XInputDotNetPure; // Required in C#
 using Valve.VR;
 
-
 public class SentientListener : MonoBehaviour{
-    bool playerIndexSet = false;
-//    PlayerIndex playerIndex;
+	// public SteamVR_Controller.Device controller;
+    public Controller controller;
+    new Rigidbody rigidbody;
 
-	public SteamVR_Controller.Device controller;
+    GameObject next;
+    float collisionPulse = 0;
 
+    void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody>();
+        next = randomProp();
+    }
+
+
+    public static GameObject randomProp(){
+        //random free prop
+        return Array.FindAll(GameObject.FindGameObjectsWithTag("Sentient"), obj => obj.GetComponent<SentientListener>() == null).random();
+    }
+
+    // float calcStrength(Collision collision){
+    //     // return (collision.impulse/Time.fixedDeltaTime).magnitude;
+    //     // return collision.relativeVelocity.magnitude;
+    //     return ;
+    //     // return (collision.impulse/collision.collider.GetComponent<Rigidbody>().mass/Time.fixedDeltaTime).magnitude;
+    // }
+
+    float startCollision = 0;
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.tag == "Sentient"){
-            float strength = getStrength(collision)*0.01f;
-            Debug.Log("Velocity Strength: " + strength);
-            pulse(strength);
+        if(collision.collider.gameObject == next){
+
+        } else if(collision.collider.tag == "Sentient"){
+            startCollision = Time.time;
         }
     }
 
     void OnCollisionStay(Collision collision)
     {
+        //hold loud collision for a time
         if(collision.collider.tag == "Sentient"){
-            float strength = (collision.impulse/collision.collider.GetComponent<Rigidbody>().mass/Time.fixedDeltaTime).magnitude*0.01f;
-                Debug.Log("Collision Strength: " + strength);
-            pulse(strength);
+            var mod = 0.2 < Time.time - startCollision ? 0.12f : 0.25f;
+            collisionPulse = Math.Min(rigidbody.velocity.sqrMagnitude/2, 1.0f)*mod;
         }
-    }
-
-    float getStrength(Collision collision){
-        // return (collision.impulse/Time.fixedDeltaTime).magnitude;
-        return (collision.impulse/collision.collider.GetComponent<Rigidbody>().mass/Time.fixedDeltaTime).magnitude;
     }
 
     void OnCollisionExit(Collision collision)
     {
-        pulse(0);
+        collisionPulse = 0;
     }
 
-    void pulse(float strength){
-        // GamePad.SetVibration(playerIndex, strength, strength);
-        controller.TriggerHapticPulse((ushort)(strength*500));
+    void OnDisable()
+    {
+        controller.vibrate(0);
     }
-    
-    void Update(){
-//        if (!playerIndexSet && GamePad.GetState(playerIndex).IsConnected)
-//        {
-//            for (int i = 0; i < 4; ++i)
-//            {
-//                PlayerIndex testPlayerIndex = (PlayerIndex)i;
-//                GamePadState testState = GamePad.GetState(testPlayerIndex);
-//                if (testState.IsConnected)
-//                {
-//                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
-//                    playerIndex = testPlayerIndex;
-//                    playerIndexSet = true;
-//                }
-//            }
-//        }
+
+    // const float pulseProp
+    float lastGeiger = 0;
+    static public float triggerDist = 0.05f;
+    // Update is called once per frame
+    void Update()
+    {
+        //distance from controller
+		var targetDist = Math.Min(1, Vector3.Distance(next.transform.position, controller.transform.position)/3);
+
+        if(targetDist < triggerDist){
+            controller.setTarget(next);
+            return;
+        }
+
+        float interval = Mathf.Lerp(0.01f, 2f, targetDist);
+        interval *= interval;
+
+        //geiger counter
+        //if interval has passed
+        if (interval < Time.time - lastGeiger)
+            lastGeiger = Time.time;
+
+        //if still inside vibrate window at start of interval
+        //Math.Lerp = time in each interval to vibrate
+        bool geiger = Time.time - lastGeiger < Mathf.Lerp(0.01f, 0.2f, targetDist);
+        // var geigerVibration = (float)Math.Sin(Math.PI*2*Time.time/)*2-1;
+        
+        controller.vibrate(Math.Max(collisionPulse, geiger ? 0.6f : 0));
     }
 }

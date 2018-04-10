@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 136859698546865678}
   m_Layer: 0
   m_Name: fotocamera
-  m_TagString: Untagged
+  m_TagString: Sentient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,7 +123,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.3
   m_Drag: 5
-  m_AngularDrag: 2
+  m_AngularDrag: 5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
