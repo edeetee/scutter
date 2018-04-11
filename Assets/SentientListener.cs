@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using XInputDotNetPure; // Required in C#
 using Valve.VR;
 
 public class SentientListener : MonoBehaviour{
@@ -63,7 +62,7 @@ public class SentientListener : MonoBehaviour{
 
     // const float pulseProp
     float lastGeiger = 0;
-    static public float triggerDist = 0.05f;
+    static public float triggerDist = 0.1f;
     // Update is called once per frame
     void Update()
     {

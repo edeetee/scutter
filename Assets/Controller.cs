@@ -1,47 +1,60 @@
-﻿using System;
+﻿#if (UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN)
+#define WIN
+#endif
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+#if WIN
 using XInputDotNetPure; // Required in C#
+#endif
 
-public class Controller : MonoBehaviour {
-	public bool drawDebug = true;
-            
-	Vector3 top = Vector3.zero;
-	GameObject target;
+
+public class Controller : MonoBehaviour
+{
+    public bool drawDebug = true;
+
+    Vector3 top = Vector3.zero;
+    GameObject target;
     GameObject next;
 
-	SpringJoint spring;
+    SpringJoint spring;
 
-	SteamVR_Controller.Device controller;
+    Hand hand;
 
-	//TODO geiger
+    //TODO geiger
 
-	void Awake () {
-		spring = gameObject.AddComponent<SpringJoint>();
-		spring.spring = 100f;
-		spring.damper = 10f;
-		spring.minDistance = 0.01f;
-		spring.autoConfigureConnectedAnchor = false;
-		GetComponent<Rigidbody>().isKinematic = true;
+    void Awake()
+    {
+        spring = gameObject.AddComponent<SpringJoint>();
+        spring.spring = 100f;
+        spring.damper = 10f;
+        spring.minDistance = 0.01f;
+        spring.autoConfigureConnectedAnchor = false;
+        GetComponent<Rigidbody>().isKinematic = true;
 
-		Hand hand = transform.GetComponentInParent<Hand>() ?? transform.GetComponent<Hand>();
-        controller = hand.controller;
+        hand = transform.GetComponentInParent<Hand>() ?? transform.GetComponent<Hand>();
 
-		GameObject randObj = SentientListener.randomProp();
-		setTarget(randObj);
-	}
+        GameObject randObj = SentientListener.randomProp();
+        setTarget(randObj);
+    }
 
-	//gamepad player
+#if WIN
+    //gamepad player
     PlayerIndex playerIndex = PlayerIndex.One;
+#endif
 
-	void Update() {
-		//debug update target
-		if(spring.connectedBody.gameObject != target){
-			setTarget(spring.connectedBody.gameObject);
-		}
+    void Update()
+    {
+        //debug update target
+        if (spring.connectedBody.gameObject != target)
+        {
+            setTarget(spring.connectedBody.gameObject);
+        }
 
+#if WIN
         // sets up gamepad for vibration testing
         if (!isGamepadConnected())
         {
@@ -56,48 +69,59 @@ public class Controller : MonoBehaviour {
                 }
             }
         }
-	}
+#endif
+    }
 
-	public void setTarget(GameObject target){
-		if(this.target != null)
-			Destroy(this.target.GetComponent<SentientListener>());
+    public void setTarget(GameObject target)
+    {
+        if (this.target != null)
+            Destroy(this.target.GetComponent<SentientListener>());
 
-		if(this.target == target){
-			Debug.LogError("tried to re-set a target prop");
-			return;
-		}
+        if (this.target == target)
+        {
+            Debug.LogError("tried to re-set a target prop");
+            return;
+        }
 
-		this.target = target;
+        this.target = target;
 
-		spring.connectedBody = target.GetComponent<Rigidbody>();
+        spring.connectedBody = target.GetComponent<Rigidbody>();
 
-		top = Vector3.zero;
-		foreach (var collider in target.GetComponents<Collider>()) {
-			var newTop = collider.getTop();
-			
-			if(top == Vector3.zero || top.y < newTop.y){
-				top = newTop;
-			}
-		}
+        top = Vector3.zero;
+        foreach (var collider in target.GetComponents<Collider>())
+        {
+            var newTop = collider.getTop();
 
-		spring.connectedAnchor = top;
+            if (top == Vector3.zero || top.y < newTop.y)
+            {
+                top = newTop;
+            }
+        }
 
-		SentientListener listener = target.gameObject.AddComponent<SentientListener>();
-		listener.controller = this;
-	}
+        spring.connectedAnchor = top;
 
-	public void vibrate(float strength){
+        SentientListener listener = target.gameObject.AddComponent<SentientListener>();
+        listener.controller = this;
+    }
+
+    public void vibrate(float strength)
+    {
         // GamePad.SetVibration(playerIndex, strength, strength);
-        if(controller != null && controller.connected)
-            controller.TriggerHapticPulse((ushort)(strength*500));
+        if (hand.controller != null && hand.controller.connected){
+            hand.controller.TriggerHapticPulse((ushort)(strength * 1000));
+        }
         // for testing
+#if WIN
         if(isGamepadConnected())
             GamePad.SetVibration(playerIndex, strength, strength);
-	}
+#endif
+    }
 
+#if WIN
     bool isGamepadConnected(){
         return GamePad.GetState(playerIndex).IsConnected;
     }
+#endif
 	
 	void OnDrawGizmos()
 	{

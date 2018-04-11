@@ -16,10 +16,11 @@ public class SetColors : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+        List<Color> possibleColors = colors.GetRange(0, colors.Count);
 		if(targetMaterials == null || targetMaterials.Count == 0)
 			return;
 
-		targetMaterials.ForEach(mat => colors.Add(mat.color));
+        targetMaterials.ForEach(mat => possibleColors.Add(mat.color));
 		foreach (var item in GetComponentsInChildren<MeshRenderer>())
 		{
 			if(targetMaterials.Contains(item.sharedMaterial)){
