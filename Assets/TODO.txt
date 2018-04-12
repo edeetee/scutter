@@ -4,3 +4,7 @@ Top-down view for screen
 Counter / current prop gui
 Correct play area
 Change model of geiger counter closeness inverse log or whatever
+
+Trigger loose game on vr player get close
+
+BLOG ABOUT ASSETS

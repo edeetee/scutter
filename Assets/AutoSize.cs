@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
+using Valve.VR.InteractionSystem;
 
+[ExecuteInEditMode]
 public class AutoSize : MonoBehaviour {
-
+	
+	SteamVR_PlayArea area;
 	// Use this for initialization
-	void Start () {
-		var chaperone = OpenVR.Chaperone;
-		HmdQuad_t quad_T = new HmdQuad_t();
-		chaperone.GetPlayAreaRect(ref quad_T);
+	void Awake () {
+//		area = Player.instance.GetComponent<SteamVR_PlayArea> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+//		area
 	}
 }

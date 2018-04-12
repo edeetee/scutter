@@ -12,7 +12,6 @@ public class ControllerSetup : MonoBehaviour {
         {
             if (hand.enabled)
             {
-                var attach = hand.transform.Find("Attach_ControllerTip") ?? hand.transform;
                 hand.gameObject.AddComponent<Controller>();
             }
         }

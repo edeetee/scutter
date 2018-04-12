@@ -117,7 +117,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: a85a2c87e3e584f22971607208be1691, type: 2}
   m_StaticBatchInfo:
@@ -152,7 +151,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 83bb97acace744621a4c44484799cc9c, type: 2}
   m_StaticBatchInfo:
@@ -195,7 +193,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1812778900776344}
   serializedVersion: 2
-  m_Mass: 0.01
+  m_Mass: 0.1
   m_Drag: 2
   m_AngularDrag: 2
   m_UseGravity: 1
@@ -221,7 +219,7 @@ CapsuleCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1812778900776344}
-  m_Material: {fileID: 13400000, guid: 5bc07470757d9504284552843221cad9, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 61.4

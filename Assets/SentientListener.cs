@@ -71,6 +71,9 @@ public class SentientListener : MonoBehaviour{
         //distance from controller
 		var targetDist = Math.Min(1, Vector3.Distance(next.transform.position, controller.transform.position)/3);
 
+		//squared
+		targetDist *= targetDist;
+
         if(targetDist < triggerDist){
             controller.setTarget(next);
             return;

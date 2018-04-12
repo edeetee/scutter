@@ -28,6 +28,14 @@ public static class Extensions {
         return list[rng.Next(list.Count)];
     }
 
+	public static Vector3 GetPointOnUnitSphereCap(Quaternion targetDirection, float angle)
+	{
+		var angleInRad = Random.Range(0.0f,angle) * Mathf.Deg2Rad;
+		var PointOnCircle = (Random.insideUnitCircle.normalized)*Mathf.Sin(angleInRad);
+		var V = new Vector3(PointOnCircle.x,PointOnCircle.y,Mathf.Cos(angleInRad));
+		return targetDirection*V;
+	}
+
     // public static IList<T> Shuffle<T>(this IList<T> list)  
     // {  
     //     int n = list.Count;  

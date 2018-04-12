@@ -17,7 +17,7 @@ public class Controller : MonoBehaviour
     public bool drawDebug = true;
 
     Vector3 top = Vector3.zero;
-    GameObject target;
+    public GameObject target;
     GameObject next;
 
     SpringJoint spring;
