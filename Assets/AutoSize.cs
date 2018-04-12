@@ -10,8 +10,6 @@ public class AutoSize : MonoBehaviour {
 		var chaperone = OpenVR.Chaperone;
 		HmdQuad_t quad_T = new HmdQuad_t();
 		chaperone.GetPlayAreaRect(ref quad_T);
-
-		
 	}
 	
 	// Update is called once per frame

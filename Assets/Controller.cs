@@ -74,8 +74,10 @@ public class Controller : MonoBehaviour
 
     public void setTarget(GameObject target)
     {
-        if (this.target != null)
+        if (this.target != null){
             Destroy(this.target.GetComponent<SentientListener>());
+            this.target.AddComponent<Enlarge>();
+        }
 
         if (this.target == target)
         {

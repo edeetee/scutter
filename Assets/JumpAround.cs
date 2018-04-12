@@ -14,7 +14,7 @@ public class JumpAround : MonoBehaviour {
             yield return new WaitForSeconds(Random.Range(0.01f, 0.6f));
             var angle = Random.onUnitSphere;
             angle.y = Mathf.Abs(angle.y);
-            var scale = Random.Range(0.7f, 2);
+            var scale = Random.Range(0.1f, 2);
             angle.Scale(new Vector3(scale, scale, scale));
             SentientListener.randomProp().GetComponent<Rigidbody>().AddForce(angle, ForceMode.VelocityChange);
         }

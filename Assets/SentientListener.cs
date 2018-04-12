@@ -21,7 +21,9 @@ public class SentientListener : MonoBehaviour{
 
     public static GameObject randomProp(){
         //random free prop
-        return Array.FindAll(GameObject.FindGameObjectsWithTag("Sentient"), obj => obj.GetComponent<SentientListener>() == null).random();
+        return Array.FindAll(GameObject.FindGameObjectsWithTag("Sentient"), obj => {
+            return obj.GetComponent<SentientListener>() == null && obj.GetComponent<Enlarge>() == null;
+        }).random();
     }
 
     // float calcStrength(Collision collision){
@@ -87,6 +89,6 @@ public class SentientListener : MonoBehaviour{
         bool geiger = Time.time - lastGeiger < Mathf.Lerp(0.01f, 0.2f, targetDist);
         // var geigerVibration = (float)Math.Sin(Math.PI*2*Time.time/)*2-1;
         
-        controller.vibrate(Math.Max(collisionPulse, geiger ? 0.6f : 0));
+        controller.vibrate(geiger ? 0.6f : collisionPulse);
     }
 }

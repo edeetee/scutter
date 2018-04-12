@@ -3,3 +3,4 @@ Background noise for vr
 Top-down view for screen
 Counter / current prop gui
 Correct play area
+Change model of geiger counter closeness inverse log or whatever

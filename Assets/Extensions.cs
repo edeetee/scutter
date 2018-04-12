@@ -17,6 +17,11 @@ public static class Extensions {
         return new Vector3(v.x, v.y, z);
     }
 
+    public static Vector3 All(float z)
+    {
+        return new Vector3(z, z, z);
+    }
+
     public static System.Random rng = new System.Random();  
 
     public static T random<T>(this IList<T> list){
