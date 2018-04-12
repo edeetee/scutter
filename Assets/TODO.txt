@@ -2,3 +2,4 @@
 Background noise for vr
 Top-down view for screen
 Counter / current prop gui
+Correct play area
