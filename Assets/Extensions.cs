@@ -24,7 +24,8 @@ public static class Extensions {
 
     public static Vector3 Scale(this Vector3 v, float z)
     {
-        return Vector3.Scale(v, All(z));
+        v.Scale(All(z));
+        return v;
     }
 
     public static System.Random rng = new System.Random();  

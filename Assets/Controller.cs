@@ -25,11 +25,10 @@ public class Controller : MonoBehaviour
     Hand hand;
 
     //TODO geiger
-
     void Awake()
     {
         spring = gameObject.AddComponent<SpringJoint>();
-        spring.spring = 100f;
+        spring.spring = 30f;
         spring.damper = 10f;
         spring.minDistance = 0.01f;
         spring.autoConfigureConnectedAnchor = false;
