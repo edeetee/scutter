@@ -9,4 +9,7 @@ Trigger loose game on vr player get close
 
 Make objects float in space
 
+Allow the controller player to manipulate gravity with a button?
+VR player wins by grabbing physical controller?
+
 BLOG ABOUT ASSETS
