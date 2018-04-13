@@ -12,7 +12,7 @@ public class JumpAround : MonoBehaviour {
     IEnumerator jumper(){
         while(true){
             yield return new WaitForSeconds(Random.Range(0.01f, 0.6f));
-			var angle = Extensions.GetPointOnUnitSphereCap(Quaternion.identity, 45);
+			var angle = Random.insideUnitSphere;
             var scale = Random.Range(0.1f, 1.5f);
 			angle.Scale(Extensions.All(scale));
             SentientListener.randomProp().GetComponent<Rigidbody>().AddForce(angle, ForceMode.VelocityChange);
