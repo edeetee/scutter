@@ -15,14 +15,23 @@ public class SentientListener : MonoBehaviour{
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
-        next = randomProp();
+        next = randomProp(transform);
     }
 
 
     public static GameObject randomProp(){
         //random free prop
         return Array.FindAll(GameObject.FindGameObjectsWithTag("Sentient"), obj => {
-            return obj.GetComponent<SentientListener>() == null && obj.GetComponent<Enlarge>() == null;
+            return !obj.HasComponent<SentientListener>() && !obj.HasComponent<Zombify>();
+        }).random();
+    }
+
+    public static GameObject randomProp(Transform avoid)
+    {
+        //random free prop
+        return Array.FindAll(GameObject.FindGameObjectsWithTag("Sentient"), obj => {
+            //not sentient, not previously used, not within distance
+            return !obj.HasComponent<SentientListener>() && !obj.HasComponent<Zombify>() && 2 < Vector3.Distance(avoid.position, obj.transform.position);
         }).random();
     }
 
@@ -64,23 +73,25 @@ public class SentientListener : MonoBehaviour{
 
     // const float pulseProp
     float lastGeiger = 0;
-    static public float triggerDist = 0.1f;
+    static public float triggerDist = 0.3f;
     // Update is called once per frame
     void Update()
     {
-        //distance from controller
-		var targetDist = Math.Min(1, Vector3.Distance(next.transform.position, controller.transform.position)/3);
-
-		//squared
-		targetDist *= targetDist;
-
-        if(targetDist < triggerDist){
+        var dist = Vector3.Distance(next.transform.position, controller.transform.position);
+        if (dist < triggerDist)
+        {
             controller.setTarget(next);
             return;
         }
 
-        float interval = Mathf.Lerp(0.01f, 2f, targetDist);
-        interval *= interval;
+        //distance from controller
+        var normDist = Math.Min(1, dist/3);
+
+		//squared
+		normDist *= normDist;
+
+        float interval = Mathf.Lerp(0.01f, 1f, normDist);
+        //interval *= interval;
 
         //geiger counter
         //if interval has passed
@@ -89,9 +100,9 @@ public class SentientListener : MonoBehaviour{
 
         //if still inside vibrate window at start of interval
         //Math.Lerp = time in each interval to vibrate
-        bool geiger = Time.time - lastGeiger < Mathf.Lerp(0.01f, 0.2f, targetDist);
+        bool geiger = (Time.time - lastGeiger) < 0.03f;
         // var geigerVibration = (float)Math.Sin(Math.PI*2*Time.time/)*2-1;
         
-        controller.vibrate(geiger ? 0.6f : collisionPulse);
+        controller.vibrate(geiger ? Mathf.Lerp(0.6f, 0.2f, normDist) : collisionPulse);
     }
 }

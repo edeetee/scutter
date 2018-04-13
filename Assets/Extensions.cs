@@ -22,6 +22,11 @@ public static class Extensions {
         return new Vector3(z, z, z);
     }
 
+    public static Vector3 Scale(this Vector3 v, float z)
+    {
+        return Vector3.Scale(v, All(z));
+    }
+
     public static System.Random rng = new System.Random();  
 
     public static T random<T>(this IList<T> list){
@@ -35,6 +40,11 @@ public static class Extensions {
 		var V = new Vector3(PointOnCircle.x,PointOnCircle.y,Mathf.Cos(angleInRad));
 		return targetDirection*V;
 	}
+
+    public static bool HasComponent<T>(this GameObject obj) where T : Component
+    {
+        return obj.GetComponent<T>() != null;
+    }
 
     // public static IList<T> Shuffle<T>(this IList<T> list)  
     // {  

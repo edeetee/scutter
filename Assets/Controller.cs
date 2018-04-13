@@ -76,7 +76,7 @@ public class Controller : MonoBehaviour
     {
         if (this.target != null){
             Destroy(this.target.GetComponent<SentientListener>());
-            this.target.AddComponent<Enlarge>();
+            this.target.AddComponent<Zombify>();
         }
 
         if (this.target == target)

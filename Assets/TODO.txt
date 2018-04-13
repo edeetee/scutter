@@ -7,4 +7,6 @@ Change model of geiger counter closeness inverse log or whatever
 
 Trigger loose game on vr player get close
 
+Make objects float in space
+
 BLOG ABOUT ASSETS

@@ -4,7 +4,7 @@ using System;
 using DG.Tweening;
 using System.Collections.Generic;
 
-class Enlarge : MonoBehaviour {
+class Zombify : MonoBehaviour {
 	Rigidbody rigidBody;
 	Vector3 gravity;
 
@@ -20,20 +20,21 @@ class Enlarge : MonoBehaviour {
 		var time = 10f;
 		var deathType = ((DeathType[])Enum.GetValues (typeof(DeathType))).random ();
 
-		switch (DeathType.Rise) {
-		case DeathType.Enlarge:
-			transform.DOScale (UnityEngine.Random.Range (1.5f, 2.5f) * transform.localScale.magnitude, time);
-			break;
-		case DeathType.Hover:
-			rigidBody.useGravity = false;
-			DOTween.To (() => Physics.gravity, grav => gravity = grav, Vector3.zero, time);
-			break;
-		case DeathType.Rise:
-			rigidBody.useGravity = false;
-			Vector3 dir = (new Vector3[] { Vector3.left, -Vector3.left, Vector3.forward, -Vector3.forward }).random ();
-			dir.y += 0.6f;
-			DOTween.To (() => Physics.gravity, grav => gravity = grav, dir, time);
-			break;
+        switch (deathType) {
+    		case DeathType.Enlarge:
+    			transform.DOScale (UnityEngine.Random.Range (1.3f, 2f) * transform.localScale.magnitude, time);
+    			break;
+    		case DeathType.Hover:
+    			rigidBody.useGravity = false;
+    			DOTween.To (() => Physics.gravity, grav => gravity = grav, new Vector3(0, 0.01f), time);
+    			break;
+    		case DeathType.Rise:
+    			rigidBody.useGravity = false;
+    			Vector3 dir = (new Vector3[] { Vector3.left, -Vector3.left, Vector3.forward, -Vector3.forward }).random ();
+                dir.Scale(0.05f);
+    			dir.y += 1;
+    			DOTween.To (() => Physics.gravity, grav => gravity = grav, dir, time);
+    			break;
 		}
     }
 
