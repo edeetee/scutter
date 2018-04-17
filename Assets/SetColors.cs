@@ -14,20 +14,24 @@ public class SetColors : MonoBehaviour {
 	// cols
 	}
 
+	void AddColor(Color color){
+		Material material = new Material(targetMaterials[0]);
+		material.color = color;
+		newMaterials.Add(material);
+	}
+
 	// Use this for initialization
 	void Awake () {
-        List<Color> possibleColors = colors.GetRange(0, colors.Count);
 		if(targetMaterials == null || targetMaterials.Count == 0)
 			return;
 
-        targetMaterials.ForEach(mat => possibleColors.Add(mat.color));
+        targetMaterials.ForEach(mat => AddColor(mat.color));
+		colors.ForEach(color => AddColor(color));
+
 		foreach (var item in GetComponentsInChildren<MeshRenderer>())
 		{
 			if(targetMaterials.Contains(item.sharedMaterial)){
-				Material material = new Material(item.sharedMaterial);
-				material.color = colors.random();
-				newMaterials.Add(material);
-				item.sharedMaterial = material;
+				item.sharedMaterial = newMaterials.random();
 			}
 		}
 	}

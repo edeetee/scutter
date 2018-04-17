@@ -11,9 +11,9 @@ public class JumpAround : MonoBehaviour {
 	
     IEnumerator jumper(){
         while(true){
-            yield return new WaitForSeconds(Random.Range(0.1f, 2f));
+            yield return new WaitForSeconds(Random.Range(0.1f, 1f));
 			var angle = Random.insideUnitSphere;
-            var scale = Random.Range(0.1f, 1f);
+            var scale = Random.Range(0.001f, 0.1f);
 			angle.Scale(scale);
             Rigidbody push = SentientListener.randomProp().GetComponent<Rigidbody>();
             push.AddForce(angle, ForceMode.VelocityChange);
