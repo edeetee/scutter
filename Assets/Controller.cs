@@ -48,7 +48,7 @@ public class Controller : MonoBehaviour
 
     float triggerStart = 0;
     Tweener shake;
-    const float triggerTime = 2f;
+    const float triggerTime = 1f;
 
 	void OnDisable()
 	{
@@ -82,7 +82,7 @@ public class Controller : MonoBehaviour
                 //    Debug.Log(scale);
                 //    target.transform.localScale = startScale.Scale(scale);
                 //}, 0f, 1f)
-                target.transform.DOScale(Vector3.zero, 0.4f).OnComplete(() => {
+                target.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() => {
                     Destroy(target.gameObject);
                     Debug.Log("destroyed");
                 });
