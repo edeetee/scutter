@@ -87,8 +87,9 @@ public class SentientListener : MonoBehaviour{
         //distance from controller
         var normDist = Math.Min(1, dist/3);
 
-		//squared
-		normDist *= normDist;
+        //squared
+        normDist *= normDist;
+        //normDist = Mathf.Sqrt(normDist);
 
         float interval = Mathf.Lerp(0.01f, 1f, normDist);
         //interval *= interval;

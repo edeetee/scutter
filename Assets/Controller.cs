@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+using DG.Tweening;
 #if WIN
 using XInputDotNetPure; // Required in C#
 #endif
@@ -45,12 +46,49 @@ public class Controller : MonoBehaviour
     PlayerIndex playerIndex = PlayerIndex.One;
 #endif
 
-    void Update()
+    float triggerStart = 0;
+    Tweener shake;
+    const float triggerTime = 2f;
+
+	void OnDisable()
+	{
+        if (target)
+            Destroy(target.GetComponent<SentientListener>());
+	}
+
+	void Update()
     {
         //debug update target
         if (spring.connectedBody.gameObject != target)
         {
             setTarget(spring.connectedBody.gameObject);
+        }
+
+        if (hand.controller.GetHairTriggerDown()){
+            triggerStart = Time.time;
+            shake = target.transform.DOShakeRotation(triggerTime, 40);
+        }
+
+        var progress = (Time.time - triggerStart) / triggerTime;
+
+        if(hand.controller.GetHairTrigger()){
+            hand.controller.TriggerHapticPulse((ushort)(progress * 700));
+
+            if(1f < progress){
+                Destroy(this);
+
+                var startScale = target.transform.localScale;
+                //DOTween.To(() => 1f, scale => {
+                //    Debug.Log(scale);
+                //    target.transform.localScale = startScale.Scale(scale);
+                //}, 0f, 1f)
+                target.transform.DOScale(Vector3.zero, 0.4f).OnComplete(() => {
+                    Destroy(target.gameObject);
+                    Debug.Log("destroyed");
+                });
+            }
+        } else if(hand.controller.GetHairTriggerUp()){
+            shake.Kill();
         }
 
 #if WIN
@@ -75,7 +113,7 @@ public class Controller : MonoBehaviour
     {
         if (this.target != null){
             Destroy(this.target.GetComponent<SentientListener>());
-            this.target.AddComponent<Zombify>();
+            //this.target.AddComponent<Zombify>();
         }
 
         if (this.target == target)
@@ -126,7 +164,7 @@ public class Controller : MonoBehaviour
 	
 	void OnDrawGizmos()
 	{
-		if(drawDebug){
+        if(drawDebug){
 			Gizmos.DrawWireSphere(transform.position, SentientListener.triggerDist);
 
 			Gizmos.color = Color.cyan;
