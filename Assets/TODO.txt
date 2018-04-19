@@ -1,8 +1,11 @@
-﻿Background noise for vr
-Counter / current prop gui
+﻿Counter / current prop gui
 Correct play area
 Change model of geiger counter closeness inverse log or whatever
 
 Allow the controller player to manipulate gravity with a button?
 
 BLOG ABOUT ASSETS, skybox
+
+Background noise for vr
+Make angle movement more damp??
+Controller and prop should be closer

@@ -33,16 +33,17 @@ public class Controller : MonoBehaviour
     void Awake()
     {
         spring = gameObject.AddComponent<SpringJoint>();
-        spring.spring = 30f;
+        spring.spring = 40f;
         spring.damper = 10f;
-        spring.minDistance = 0.01f;
+        //spring.minDistance = 0.01f;
         spring.autoConfigureConnectedAnchor = false;
         GetComponent<Rigidbody>().isKinematic = true;
 
         hand = transform.GetComponentInParent<Hand>() ?? transform.GetComponent<Hand>();
 
         GameObject randObj = SentientListener.randomProp();
-        setTarget(randObj);
+        spring.connectedBody = randObj.GetComponent<Rigidbody>();
+        //setTarget(randObj);
     }
 
 #if WIN
