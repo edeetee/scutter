@@ -18,7 +18,6 @@ public class SentientListener : MonoBehaviour{
         next = randomProp(transform);
     }
 
-
     public static GameObject randomProp(){
         //random free prop
         return Array.FindAll(GameObject.FindGameObjectsWithTag("Sentient"), obj => {

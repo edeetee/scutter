@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 using DG.Tweening;
+using UnityEngine.UI;
 #if WIN
 using XInputDotNetPure; // Required in C#
 #endif
-
 
 public class Controller : MonoBehaviour
 {
@@ -24,6 +24,10 @@ public class Controller : MonoBehaviour
     SpringJoint spring;
 
     Hand hand;
+
+    public Text scoreObj;
+    public SpriteRenderer highlight;
+    int score = 0;
 
     //TODO geiger
     void Awake()
@@ -64,31 +68,33 @@ public class Controller : MonoBehaviour
             setTarget(spring.connectedBody.gameObject);
         }
 
-        if (hand.controller.GetHairTriggerDown()){
-            triggerStart = Time.time;
-            shake = target.transform.DOShakeRotation(triggerTime, 40);
-        }
-
-        var progress = (Time.time - triggerStart) / triggerTime;
-
-        if(hand.controller.GetHairTrigger()){
-            hand.controller.TriggerHapticPulse((ushort)(progress * 700));
-
-            if(1f < progress){
-                Destroy(this);
-
-                var startScale = target.transform.localScale;
-                //DOTween.To(() => 1f, scale => {
-                //    Debug.Log(scale);
-                //    target.transform.localScale = startScale.Scale(scale);
-                //}, 0f, 1f)
-                target.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() => {
-                    Destroy(target.gameObject);
-                    Debug.Log("destroyed");
-                });
+        if(isConnected()){
+            if (hand.controller.GetHairTriggerDown()){
+                triggerStart = Time.time;
+                shake = target.transform.DOShakeRotation(triggerTime, 40);
             }
-        } else if(hand.controller.GetHairTriggerUp()){
-            shake.Kill();
+
+            var progress = (Time.time - triggerStart) / triggerTime;
+
+            if(hand.controller.GetHairTrigger()){
+                hand.controller.TriggerHapticPulse((ushort)(progress * 700));
+
+                if(1f < progress){
+                    Destroy(this);
+
+                    var startScale = target.transform.localScale;
+                    //DOTween.To(() => 1f, scale => {
+                    //    Debug.Log(scale);
+                    //    target.transform.localScale = startScale.Scale(scale);
+                    //}, 0f, 1f)
+                    target.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() => {
+                        Destroy(target.gameObject);
+                        Debug.Log("destroyed");
+                    });
+                }
+            } else if(hand.controller.GetHairTriggerUp()){
+                shake.Kill();
+            }
         }
 
 #if WIN
@@ -112,6 +118,8 @@ public class Controller : MonoBehaviour
     public void setTarget(GameObject target)
     {
         if (this.target != null){
+            score += 1;
+            scoreObj.text = score.ToString();
             Destroy(this.target.GetComponent<SentientListener>());
             //this.target.AddComponent<Zombify>();
         }
@@ -123,6 +131,9 @@ public class Controller : MonoBehaviour
         }
 
         this.target = target;
+
+        highlight.transform.parent = target.transform;
+        highlight.transform.localPosition = Vector3.zero;
 
         spring.connectedBody = target.GetComponent<Rigidbody>();
 
@@ -143,10 +154,14 @@ public class Controller : MonoBehaviour
         listener.controller = this;
     }
 
+    private bool isConnected(){
+        return hand.controller != null && hand.controller.connected;
+    }
+
     public void vibrate(float strength)
     {
         // GamePad.SetVibration(playerIndex, strength, strength);
-        if (hand.controller != null && hand.controller.connected){
+        if (isConnected()){
             hand.controller.TriggerHapticPulse((ushort)(strength * 1000));
         }
         // for testing

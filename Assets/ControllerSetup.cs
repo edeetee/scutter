@@ -2,21 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+using UnityEngine.UI;
 
 public class ControllerSetup : MonoBehaviour {
     List<uint> controllers = new List<uint>();
 
-    // Use this for initialization
-    void Start()
-    {
-        foreach (var hand in Player.instance.hands)
-        {
-            if (hand.controller != null && hand.controller.connected)
-            {
-                hand.gameObject.AddComponent<Controller>();
-            }
-        }
-    }
+    //MUST BE IN SAME ORDER
+    public List<Text> scoreObjs;
+    public List<SpriteRenderer> highlights;
 
 	private void Update()
 	{
@@ -27,7 +20,11 @@ public class ControllerSetup : MonoBehaviour {
                 if(!controllers.Contains(controller.index) && controller.connected){
                     Debug.Log("Controller " + controller.index + " added.");
                     controllers.Add(controller.index);
-                    hand.gameObject.AddComponent<Controller>();
+                    var script = hand.gameObject.AddComponent<Controller>();
+                    script.scoreObj = scoreObjs[0];
+                    script.highlight = highlights[0];
+                    scoreObjs.RemoveAt(0);
+                    highlights.RemoveAt(0);
                 }
             }
         }
