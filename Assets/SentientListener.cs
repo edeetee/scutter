@@ -72,7 +72,7 @@ public class SentientListener : MonoBehaviour{
 
     // const float pulseProp
     float lastGeiger = 0;
-    static public float triggerDist = 0.3f;
+    static public float triggerDist = 0.5f;
     // Update is called once per frame
     void Update()
     {
@@ -103,6 +103,6 @@ public class SentientListener : MonoBehaviour{
         bool geiger = (Time.time - lastGeiger) < 0.03f;
         // var geigerVibration = (float)Math.Sin(Math.PI*2*Time.time/)*2-1;
         
-        controller.vibrate(geiger ? Mathf.Lerp(0.6f, 0.2f, normDist) : collisionPulse);
+        controller.vibrate(geiger ? 0.6f : collisionPulse);
     }
 }

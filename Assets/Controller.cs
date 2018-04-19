@@ -33,7 +33,7 @@ public class Controller : MonoBehaviour
     void Awake()
     {
         spring = gameObject.AddComponent<SpringJoint>();
-        spring.spring = 40f;
+        spring.spring = 100f;
         spring.damper = 10f;
         //spring.minDistance = 0.01f;
         spring.autoConfigureConnectedAnchor = false;
@@ -118,17 +118,17 @@ public class Controller : MonoBehaviour
 
     public void setTarget(GameObject target)
     {
+        if (this.target == target)
+        {
+            Debug.LogError("tried to re-set a target prop");
+            return;
+        }
+
         if (this.target != null){
             score += 1;
             scoreObj.text = score.ToString();
             Destroy(this.target.GetComponent<SentientListener>());
             //this.target.AddComponent<Zombify>();
-        }
-
-        if (this.target == target)
-        {
-            Debug.LogError("tried to re-set a target prop");
-            return;
         }
 
         this.target = target;
@@ -185,8 +185,10 @@ public class Controller : MonoBehaviour
 
 			Gizmos.color = Color.cyan;
 			// Gizmos.DrawWireSphere(worldTop, 0.05f);
-			Vector3 worldTop = target.transform.TransformPoint(top);
-			Gizmos.DrawLine(worldTop, new Ray(worldTop, target.transform.up).GetPoint(0.08f));
+            if(target != null){
+                Vector3 worldTop = target.transform.TransformPoint(top);
+                Gizmos.DrawLine(worldTop, new Ray(worldTop, target.transform.up).GetPoint(0.08f));
+            }
 		}
 	}
 }
